@@ -41,7 +41,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <Link href="/" className="text-xl font-bold tracking-tight">Family Challenge</Link>
+          <Link href="/" className="text-xl font-bold tracking-tight">Tabbd</Link>
           <p className="text-gray-500 text-sm mt-2">Welcome back</p>
         </div>
 

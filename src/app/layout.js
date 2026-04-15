@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 
 export const metadata = {
-  title: 'Family Challenge',
+  title: 'Tabbd',
   description: 'The family operating system. Challenges, rewards, and growth for everyone.',
   manifest: '/manifest.json',
   themeColor: '#0066FF',

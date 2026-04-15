@@ -5,7 +5,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <div className="text-xl font-bold tracking-tight">Family Challenge</div>
+        <div className="text-xl font-bold tracking-tight">Tabbd</div>
         <div className="flex items-center gap-4">
           <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">Log in</Link>
           <Link href="/signup" className="text-sm font-semibold text-white bg-blue-600 px-5 py-2.5 rounded-lg hover:bg-blue-700 transition">Get started</Link>
@@ -45,7 +45,7 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-gray-200 py-8 text-center text-sm text-gray-400">
-        Family Challenge · Built with behavioral science
+        Tabbd · Built with behavioral science
       </footer>
     </div>
   );

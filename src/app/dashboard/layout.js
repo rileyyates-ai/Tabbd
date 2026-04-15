@@ -90,7 +90,7 @@ export default function DashboardLayout({ children }) {
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-60 flex-col fixed left-0 top-0 bottom-0 bg-white border-r border-gray-200 z-10">
         <div className="px-5 pt-6 pb-4">
-          <div className="text-lg font-bold tracking-tight">Family Challenge</div>
+          <div className="text-lg font-bold tracking-tight">Tabbd</div>
           <div className="text-xs text-gray-400 mt-0.5">{family?.name}</div>
         </div>
 
