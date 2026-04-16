@@ -1,9 +1,10 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase-browser';
+
+const C = { bg: '#0D0D0D', card: '#1A1A2E', green: '#39FF14', white: '#F0F0F5', sec: '#9CA3AF', border: 'rgba(255,255,255,0.08)' };
 
 export default function JoinPage() {
   const [step, setStep] = useState(1);
@@ -17,132 +18,54 @@ export default function JoinPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const inputStyle = { background: C.bg, border: `1px solid ${C.border}`, color: C.white };
 
   const lookupCode = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const { data, error } = await supabase
-      .from('families')
-      .select('id, name')
-      .eq('invite_code', inviteCode.toUpperCase().trim())
-      .single();
-
-    if (error || !data) {
-      setError('Invite code not found. Check the code and try again.');
-      setLoading(false);
-      return;
-    }
-
-    setFamilyData(data);
-    setStep(2);
-    setLoading(false);
+    e.preventDefault(); setLoading(true); setError(null);
+    const { data, error } = await supabase.from('families').select('id, name').eq('invite_code', inviteCode.toUpperCase().trim()).single();
+    if (error || !data) { setError('Invite code not found.'); setLoading(false); return; }
+    setFamilyData(data); setStep(2); setLoading(false);
   };
 
   const handleJoin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
+    e.preventDefault(); setLoading(true); setError(null);
     try {
       const parsedAge = parseInt(age);
       const role = !age ? 'parent' : parsedAge >= 13 ? 'teen' : 'kid';
-
-      // 1. Create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { name } },
-      });
-      if (authError) throw authError;
-
-      // 2. Create profile linked to the family
-      const { error: profError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,
-          family_id: familyData.id,
-          name,
-          role,
-          age: parsedAge || null,
-        });
-      if (profError) throw profError;
-
-      router.push('/dashboard');
-      router.refresh();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+      const { data: authData, error: authErr } = await supabase.auth.signUp({ email, password, options: { data: { name } } });
+      if (authErr) throw authErr;
+      const { error: profErr } = await supabase.from('profiles').insert({ id: authData.user.id, family_id: familyData.id, name, role, age: parsedAge || null });
+      if (profErr) throw profErr;
+      router.push('/dashboard'); router.refresh();
+    } catch (err) { setError(err.message); }
+    finally { setLoading(false); }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: C.bg }}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-xl font-bold tracking-tight">Tabbd</Link>
-          <p className="text-gray-500 text-sm mt-2">
-            {step === 1 ? 'Enter your family invite code' : `Joining ${familyData?.name}`}
-          </p>
-        </div>
-
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="text-center mb-8"><Link href="/" className="text-xl font-bold tracking-tight" style={{ color: C.white }}>TABBD</Link><p className="text-sm mt-2" style={{ color: C.sec }}>{step === 1 ? 'Enter your family invite code' : `Joining ${familyData?.name}`}</p></div>
+        <div className="rounded-xl p-6" style={{ background: C.card, border: `1px solid ${C.border}` }}>
           {step === 1 && (
             <form onSubmit={lookupCode} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Invite code</label>
-                <input
-                  type="text"
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                  className="w-full px-3.5 py-3 border border-gray-200 rounded-lg text-center text-lg font-bold tracking-widest focus:outline-none focus:border-blue-500"
-                  placeholder="XXXXXX"
-                  maxLength={6}
-                  required
-                />
-                <p className="text-xs text-gray-400 mt-2">Ask a parent in your family for this code</p>
-              </div>
-              {error && <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</div>}
-              <button type="submit" disabled={loading} className="w-full py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
-                {loading ? 'Looking up...' : 'Find my family'}
-              </button>
+              <div><label className="block text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: C.sec }}>Invite code</label><input type="text" value={inviteCode} onChange={e => setInviteCode(e.target.value.toUpperCase())} className="w-full px-3.5 py-3 rounded-lg text-center text-lg font-bold tracking-widest font-mono focus:outline-none" style={{ ...inputStyle, color: C.green }} placeholder="XXXXXX" maxLength={6} required /><p className="text-xs mt-2" style={{ color: C.sec }}>Ask a parent in your family for this code</p></div>
+              {error && <div className="text-sm px-3 py-2 rounded-lg" style={{ background: '#FF6B6B20', color: '#FF6B6B' }}>{error}</div>}
+              <button type="submit" disabled={loading} className="w-full py-2.5 text-sm font-bold rounded-lg disabled:opacity-50" style={{ background: C.green, color: '#0D0D0D' }}>{loading ? 'Looking up...' : 'Find my family'}</button>
             </form>
           )}
-
           {step === 2 && (
             <form onSubmit={handleJoin} className="space-y-4">
-              <div className="bg-blue-50 rounded-lg p-3 text-center mb-2">
-                <div className="text-sm font-semibold text-blue-700">Joining: {familyData?.name}</div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Your name</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Your first name" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="you@email.com" required />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Password</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="At least 8 characters" required minLength={8} />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Age (leave blank if parent)</label>
-                <input type="number" value={age} onChange={(e) => setAge(e.target.value)} className="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500" placeholder="Optional" min={1} max={99} />
-              </div>
-              {error && <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</div>}
-              <button type="submit" disabled={loading} className="w-full py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
-                {loading ? 'Joining...' : 'Join family'}
-              </button>
+              <div className="rounded-lg p-3 text-center mb-2" style={{ background: C.green + '15', border: `1px solid ${C.green}30` }}><div className="text-sm font-semibold" style={{ color: C.green }}>Joining: {familyData?.name}</div></div>
+              <div><label className="block text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: C.sec }}>Your name</label><input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full px-3.5 py-2.5 rounded-lg text-sm focus:outline-none" style={inputStyle} placeholder="Your first name" required /></div>
+              <div><label className="block text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: C.sec }}>Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full px-3.5 py-2.5 rounded-lg text-sm focus:outline-none" style={inputStyle} placeholder="you@email.com" required /></div>
+              <div><label className="block text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: C.sec }}>Password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full px-3.5 py-2.5 rounded-lg text-sm focus:outline-none" style={inputStyle} placeholder="At least 8 characters" required minLength={8} /></div>
+              <div><label className="block text-[11px] font-semibold uppercase tracking-wider mb-1.5" style={{ color: C.sec }}>Age (leave blank if parent)</label><input type="number" value={age} onChange={e => setAge(e.target.value)} className="w-full px-3.5 py-2.5 rounded-lg text-sm focus:outline-none" style={inputStyle} placeholder="Optional" min={1} max={99} /></div>
+              {error && <div className="text-sm px-3 py-2 rounded-lg" style={{ background: '#FF6B6B20', color: '#FF6B6B' }}>{error}</div>}
+              <button type="submit" disabled={loading} className="w-full py-2.5 text-sm font-bold rounded-lg disabled:opacity-50" style={{ background: C.green, color: '#0D0D0D' }}>{loading ? 'Joining...' : 'Join family'}</button>
             </form>
           )}
         </div>
-
-        <div className="text-center mt-6 text-sm text-gray-500">
-          Want to create a new family? <Link href="/signup" className="text-blue-600 font-semibold hover:underline">Sign up</Link>
-        </div>
+        <div className="text-center mt-6 text-sm" style={{ color: C.sec }}>Want to create a new family? <Link href="/signup" className="font-semibold" style={{ color: C.green }}>Sign up</Link></div>
       </div>
     </div>
   );

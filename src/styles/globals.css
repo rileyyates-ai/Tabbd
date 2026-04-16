@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -15,50 +15,51 @@ body {
   font-family: 'DM Sans', 'Helvetica Neue', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #F8F9FA;
-  color: #0A0A0A;
+  background: #0D0D0D;
+  color: #F0F0F5;
   overscroll-behavior-y: contain;
 }
 
-input, select, textarea, button {
-  font-family: inherit;
-}
+.font-mono { font-family: 'JetBrains Mono', 'Space Mono', monospace; }
 
-/* Scrollbar */
+input, select, textarea, button { font-family: inherit; }
+input::placeholder, textarea::placeholder { color: #6B7280; }
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
-/* Safe area for bottom nav on notched phones */
-.safe-area-pb {
-  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-}
+.safe-area-pb { padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(100%); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes lootPop {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lootPop { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 8px rgba(57,255,20,0.3); } 50% { box-shadow: 0 0 16px rgba(57,255,20,0.5); } }
 
 .animate-fade-in { animation: fadeIn 0.2s ease; }
 .animate-slide-up { animation: slideUp 0.25s ease; }
 .animate-loot-pop { animation: lootPop 0.3s ease; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
 
-/* Mobile touch improvements */
+/* Receipt tear motif */
+.receipt-tear {
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='8' viewBox='0 0 24 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 8L6 0L12 8L18 0L24 8' fill='none' stroke='%2339FF14' stroke-width='1' opacity='0.3'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  padding-bottom: 12px;
+}
+
 @media (max-width: 768px) {
-  button, a {
-    -webkit-touch-callout: none;
-    user-select: none;
-  }
+  button, a { -webkit-touch-callout: none; user-select: none; }
+}
+
+select {
+  background-color: #0D0D0D;
+  color: #F0F0F5;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+select option {
+  background: #1A1A2E;
+  color: #F0F0F5;
 }
