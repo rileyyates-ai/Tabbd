@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase-browser';
 import { Home, Target, Plus, Rss, Gift, User, BarChart3, Settings, LogOut, Menu, X } from 'lucide-react';
 import { Toast, LootDrop, C } from '@/components/ui';
+import { TabbdLogo } from '@/components/Logo';
 
 const AppContext = createContext(null);
 export function useApp() { return useContext(AppContext); }
@@ -88,7 +89,7 @@ export default function DashboardLayout({ children }) {
 
         {/* Desktop Sidebar */}
         <aside className="hidden md:flex w-60 flex-col fixed left-0 top-0 bottom-0 z-10" style={{ background: C.card, borderRight: `1px solid ${C.border}` }}>
-          <div className="px-5 pt-6 pb-4"><div className="text-lg font-bold tracking-tight" style={{ color: C.green }}>TABBD</div><div className="text-[11px] mt-0.5" style={{ color: C.sec }}>{family?.name}</div></div>
+          <div className="px-5 pt-6 pb-4"><TabbdLogo size="default" /><div className="text-[11px] mt-0.5" style={{ color: C.sec }}>{family?.name}</div></div>
           <div className="mx-3 mb-2 px-3 py-2.5 rounded-xl" style={{ background: C.bg, border: `1px solid ${C.border}` }}>
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: (profile.avatar_color || C.green) + '20', color: profile.avatar_color || C.green }}>{profile.name?.charAt(0)}</div>

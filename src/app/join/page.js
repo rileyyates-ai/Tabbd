@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase-browser';
+import { TabbdLogo } from '@/components/Logo';
 
 const C = { bg: '#0D0D0D', card: '#1A1A2E', green: '#39FF14', white: '#F0F0F5', sec: '#9CA3AF', border: 'rgba(255,255,255,0.08)' };
 
@@ -44,7 +45,7 @@ export default function JoinPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: C.bg }}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8"><Link href="/" className="text-xl font-bold tracking-tight" style={{ color: C.white }}>TABBD</Link><p className="text-sm mt-2" style={{ color: C.sec }}>{step === 1 ? 'Enter your family invite code' : `Joining ${familyData?.name}`}</p></div>
+        <div className="text-center mb-8"><Link href="/"><TabbdLogo size="default" /></Link><p className="text-sm mt-2" style={{ color: C.sec }}>{step === 1 ? 'Enter your family invite code' : `Joining ${familyData?.name}`}</p></div>
         <div className="rounded-xl p-6" style={{ background: C.card, border: `1px solid ${C.border}` }}>
           {step === 1 && (
             <form onSubmit={lookupCode} className="space-y-4">

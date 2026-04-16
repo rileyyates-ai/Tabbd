@@ -1,3 +1,4 @@
+import { TabbdLogo } from '@/components/Logo';
 import Link from 'next/link';
 import { Target, Users, Flame, ArrowRight, Star, MessageSquare, Shield } from 'lucide-react';
 
@@ -6,7 +7,7 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ background: '#0D0D0D', color: '#F0F0F5' }}>
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-5xl mx-auto">
-        <div className="text-xl font-bold tracking-tight">TABBD</div>
+        <TabbdLogo size="sm" />
         <div className="flex items-center gap-4">
           <Link href="/login" className="text-sm font-medium" style={{ color: '#9CA3AF' }}>Log in</Link>
           <Link href="/signup" className="text-sm font-bold px-5 py-2.5 rounded-lg" style={{ background: '#39FF14', color: '#0D0D0D' }}>Get started</Link>
